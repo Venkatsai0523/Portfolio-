@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venkat Sai Cheri — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0F1419;
+    --surface: #161B22;
+    --surface-2: #1C232C;
+    --line: #2A323D;
+    --text: #E6EDF3;
+    --muted: #7D8590;
+    --amber: #E3B341;
+    --teal: #39D2C0;
+    --red: #E5534B;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--amber); color:#0F1419; }
+
+  a{ color:var(--teal); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  :focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- background grid ---------- */
+  .grid-bg{
+    position:fixed; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(15,20,25,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .logo{
+    color:var(--text);
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .logo span{ color:var(--amber); }
+  .navlinks{ display:flex; gap:24px; }
+  .navlinks a{
+    color:var(--muted);
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  .navlinks a:hover{ color:var(--teal); text-decoration:none; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:88px 0 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .status-line{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--muted);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:20px;
+    margin-bottom:28px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 0 rgba(57,210,192,0.5);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(57,210,192,0.45); }
+    70%{ box-shadow:0 0 0 8px rgba(57,210,192,0); }
+    100%{ box-shadow:0 0 0 0 rgba(57,210,192,0); }
+  }
+  h1{
+    font-family:var(--mono);
+    font-size:clamp(32px, 5.5vw, 52px);
+    font-weight:700;
+    line-height:1.15;
+    letter-spacing:-0.01em;
+    max-width:14ch;
+  }
+  h1 .accent{ color:var(--amber); }
+  .role{
+    font-size:19px;
+    color:var(--muted);
+    margin-top:14px;
+    max-width:52ch;
+  }
+  .contact-row{
+    display:flex; flex-wrap:wrap; gap:18px;
+    margin-top:30px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .contact-row a{ color:var(--text); border-bottom:1px dashed var(--line); padding-bottom:2px; }
+  .contact-row a:hover{ color:var(--teal); border-color:var(--teal); text-decoration:none; }
+
+  /* ---------- section scaffolding ---------- */
+  section{ padding:64px 0; border-bottom:1px solid var(--line); }
+  .section-head{
+    display:flex; align-items:baseline; gap:12px;
+    margin-bottom:32px;
+  }
+  .section-id{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+  }
+  h2{
+    font-family:var(--mono);
+    font-size:22px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .section-rule{
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  /* ---------- summary ---------- */
+  .summary p{
+    font-size:16.5px;
+    color:#C9D1D9;
+    max-width:70ch;
+  }
+
+  /* ---------- skills ---------- */
+  .skill-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .skill-cat{
+    background:var(--surface);
+    padding:20px 22px;
+  }
+  .skill-cat h3{
+    font-family:var(--mono);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--teal);
+    margin-bottom:12px;
+  }
+  .tag-list{ display:flex; flex-wrap:wrap; gap:7px; }
+  .tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text);
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    padding:4px 9px;
+    border-radius:4px;
+  }
+
+  /* ---------- projects as process log ---------- */
+  .proc{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:6px;
+    margin-bottom:20px;
+    overflow:hidden;
+    transition:border-color .2s ease;
+  }
+  .proc:hover{ border-color:#3A4452; }
+  .proc-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .proc-id{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+  .proc-title{
+    font-size:17px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .proc-meta{ display:flex; align-items:center; gap:14px; }
+  .badge{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.06em;
+    padding:4px 10px;
+    border-radius:12px;
+    font-weight:600;
+  }
+  .badge.completed{ background:rgba(57,210,192,0.12); color:var(--teal); border:1px solid rgba(57,210,192,0.35); }
+  .badge.active{ background:rgba(227,179,65,0.12); color:var(--amber); border:1px solid rgba(227,179,65,0.35); }
+  .proc-body{ padding:20px; }
+  .proc-stack{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:14px;
+  }
+  .proc-stack b{ color:var(--muted); font-weight:500; }
+  .proc-body ul{ list-style:none; }
+  .proc-body li{
+    position:relative;
+    padding-left:20px;
+    margin-bottom:10px;
+    font-size:14.5px;
+    color:#C9D1D9;
+  }
+  .proc-body li::before{
+    content:'›';
+    position:absolute; left:0;
+    color:var(--amber);
+    font-family:var(--mono);
+  }
+  .proc-body li:last-child{ margin-bottom:0; }
+
+  /* ---------- education / certs ---------- */
+  .flat-list{ display:flex; flex-direction:column; gap:18px; }
+  .flat-item{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:20px; flex-wrap:wrap;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .flat-item:last-child{ border-bottom:none; padding-bottom:0; }
+  .flat-main strong{ font-size:15.5px; color:var(--text); display:block; }
+  .flat-main span{ font-size:13.5px; color:var(--muted); }
+  .flat-side{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--amber);
+    white-space:nowrap;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:56px 0 72px;
+    text-align:center;
+  }
+  footer .status-line{ margin-bottom:20px; }
+  footer h2{
+    font-size:26px;
+    text-transform:none;
+    letter-spacing:0;
+    margin-bottom:12px;
+  }
+  footer p{ color:var(--muted); margin-bottom:26px; }
+  .footer-links{
+    display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:13px;
+    padding:10px 20px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    color:var(--text);
+  }
+  .btn:hover{ border-color:var(--teal); color:var(--teal); text-decoration:none; }
+  .btn.primary{
+    background:var(--amber);
+    color:#0F1419;
+    border-color:var(--amber);
+    font-weight:600;
+  }
+  .btn.primary:hover{ color:#0F1419; opacity:0.9; }
+  .fine{
+    margin-top:40px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:#4B5560;
+  }
+
+  @media (max-width:640px){
+    .navlinks{ display:none; }
+    .hero{ padding:64px 0 48px; }
+    section{ padding:48px 0; }
+    .proc-head{ flex-direction:column; align-items:flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">venkat<span>@</span>backend</div>
+    <div class="navlinks">
+      <a href="#summary">Summary</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="status-line"><span class="dot"></span> STATUS: OPEN TO OPPORTUNITIES</div>
+    <h1>Venkat Sai <span class="accent">Cheri</span></h1>
+    <p class="role">Java backend engineer building event-driven microservices, concurrent systems on Java 21 virtual threads, and REST APIs that don't fall over under load.</p>
+    <div class="contact-row">
+      <a href="mailto:aryasai64@gmail.com">aryasai64@gmail.com</a>
+      <a href="tel:+918374277283">+91-8374277283</a>
+      <a href="https://linkedin.com/in/venkatsai0523" target="_blank" rel="noopener">linkedin.com/in/venkatsai0523</a>
+      <a href="https://github.com/Venkatsai0523" target="_blank" rel="noopener">github.com/Venkatsai0523</a>
+    </div>
+  </section>
+
+  <section id="summary" class="summary">
+    <div class="section-head">
+      <span class="section-id">01</span><h2>Summary</h2><div class="section-rule"></div>
+    </div>
+    <p>Java developer specializing in Spring Boot backends, event-driven microservices, and concurrent systems built on Java 21 virtual threads. Skilled in REST API design, JPA/Hibernate, relational databases, and Kafka-based messaging, with hands-on experience shipping containerized services through CI/CD pipelines. Quick to pick up new frameworks and adapt to shifting requirements, with practical exposure to Agile delivery and Linux/Unix environments. Seeking a backend or full-stack engineering role applying strong fundamentals in distributed systems and clean architecture.</p>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <span class="section-id">02</span><h2>Skills</h2><div class="section-rule"></div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-cat">
+        <h3>Languages</h3>
+        <div class="tag-list">
+          <span class="tag">Java</span><span class="tag">Python</span><span class="tag">C</span><span class="tag">JavaScript</span><span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Java / Backend</h3>
+        <div class="tag-list">
+          <span class="tag">Spring Boot</span><span class="tag">Spring Security</span><span class="tag">Spring Data JPA</span><span class="tag">Hibernate</span><span class="tag">REST APIs</span><span class="tag">JWT</span><span class="tag">Microservices</span><span class="tag">Virtual Threads</span><span class="tag">Multithreading</span><span class="tag">JavaFX</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Messaging &amp; Caching</h3>
+        <div class="tag-list">
+          <span class="tag">Apache Kafka</span><span class="tag">Redis</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Databases</h3>
+        <div class="tag-list">
+          <span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">H2</span><span class="tag">JDBC</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>DevOps &amp; Tools</h3>
+        <div class="tag-list">
+          <span class="tag">Git</span><span class="tag">GitHub Actions</span><span class="tag">Docker</span><span class="tag">Docker Compose</span><span class="tag">Jenkins</span><span class="tag">CI/CD</span><span class="tag">Selenium</span><span class="tag">Maven</span><span class="tag">Linux/Unix</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Testing</h3>
+        <div class="tag-list">
+          <span class="tag">JUnit 5</span><span class="tag">Integration Testing</span><span class="tag">ArchUnit</span><span class="tag">JaCoCo</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Other</h3>
+        <div class="tag-list">
+          <span class="tag">React</span><span class="tag">Flask</span><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">DSA</span><span class="tag">MVC</span><span class="tag">Agile/Scrum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head">
+      <span class="section-id">03</span><h2>Projects</h2><div class="section-rule"></div>
+    </div>
+
+    <div class="proc">
+      <div class="proc-head">
+        <div>
+          <div class="proc-id">PROC_001</div>
+          <div class="proc-title">Enterprise CRM Platform</div>
+        </div>
+        <div class="proc-meta"><span class="badge completed">COMPLETED</span></div>
+      </div>
+      <div class="proc-body">
+        <div class="proc-stack"><b>Stack:</b> Java · Spring Boot · Spring Data JPA/Hibernate · PostgreSQL · Redis · Kafka · JWT · MapStruct</div>
+        <ul>
+          <li>Designed a modular-monolith backend with enforced package boundaries across Identity, Lead, Customer, Opportunity, and Notification domains — restructured after integration testing exposed tight coupling.</li>
+          <li>Built an event-driven lead scoring and auto-assignment engine using Kafka for asynchronous processing, eliminating manual lead-routing steps.</li>
+          <li>Implemented RBAC and JWT authentication with Spring Security, reducing unauthorized-access risk across API endpoints; added Redis caching and an audit logging layer.</li>
+          <li>Validated architecture with ArchUnit and maintained 80%+ test coverage (JUnit/JaCoCo); authored API docs and onboarding runbooks.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proc">
+      <div class="proc-head">
+        <div>
+          <div class="proc-id">PROC_002</div>
+          <div class="proc-title">Book Store Microservices</div>
+        </div>
+        <div class="proc-meta"><span class="badge completed">COMPLETED</span></div>
+      </div>
+      <div class="proc-body">
+        <div class="proc-stack"><b>Stack:</b> Java · Spring Boot · Microservices · Docker Compose · GitHub Actions</div>
+        <ul>
+          <li>Built a distributed e-commerce book store system, including a dedicated catalog-service deployable as an independent Spring Boot microservice.</li>
+          <li>Containerized and orchestrated services locally with Docker Compose so each service could be built, tested, and deployed independently.</li>
+          <li>Automated build and validation with a GitHub Actions CI/CD workflow triggered on every commit, catching integration issues before merge.</li>
+          <li>Managed dependencies with Maven and documented service boundaries for scalable service-to-service communication.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proc">
+      <div class="proc-head">
+        <div>
+          <div class="proc-id">PROC_003</div>
+          <div class="proc-title">Native Durable Workflow Execution Engine</div>
+        </div>
+        <div class="proc-meta"><span class="badge completed">COMPLETED</span></div>
+      </div>
+      <div class="proc-body">
+        <div class="proc-stack"><b>Stack:</b> Java 21 · Virtual Threads · H2 Database · CompletableFuture</div>
+        <ul>
+          <li>Engineered a step-based durable workflow engine inspired by Temporal/Cadence, supporting crash recovery from the exact point of failure via idempotent step tracking (PENDING, RUNNING, COMPLETED, FAILED) and a sequence-ID strategy for loops and conditionals.</li>
+          <li>Adopted Java 21 virtual threads and CompletableFuture to run independent workflow steps concurrently, using H2 with ACID transactions to keep state consistent through simulated failure scenarios.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proc">
+      <div class="proc-head">
+        <div>
+          <div class="proc-id">PROC_004</div>
+          <div class="proc-title">URL Shortener Service</div>
+        </div>
+        <div class="proc-meta"><span class="badge completed">COMPLETED</span><span class="proc-id">Dec 2024 – Jan 2025</span></div>
+      </div>
+      <div class="proc-body">
+        <div class="proc-stack"><b>Stack:</b> Java · Spring Boot · React · MySQL · REST APIs · JWT</div>
+        <ul>
+          <li>Developed a full-stack URL shortening service with a React frontend and Spring Boot REST backend, including link expiration and click tracking.</li>
+          <li>Implemented JWT-based authentication with role-based access for Admin and User roles, adjusting the auth flow to support two distinct permission levels.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-head">
+      <span class="section-id">04</span><h2>Education</h2><div class="section-rule"></div>
+    </div>
+    <div class="flat-list">
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>Bachelor of Technology, Computer Science &amp; Engineering</strong>
+          <span>CMR Technical Campus, Medchal, Telangana · CGPA 8.33 / 10</span>
+        </div>
+        <div class="flat-side">Aug 2022 – May 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="certs">
+    <div class="section-head">
+      <span class="section-id">05</span><h2>Certifications &amp; Achievements</h2><div class="section-rule"></div>
+    </div>
+    <div class="flat-list">
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>Salesforce Certified Agentforce Specialist</strong>
+          <span>Credential ID: 7316845</span>
+        </div>
+        <div class="flat-side">Dec 2025</div>
+      </div>
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>Deloitte Technology Job Simulation</strong>
+          <span>Forage</span>
+        </div>
+        <div class="flat-side">Jun 2025</div>
+      </div>
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>Python Programming</strong>
+          <span>Cisco Networking Academy</span>
+        </div>
+        <div class="flat-side">2024</div>
+      </div>
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>Being Zero DSA Training</strong>
+          <span>2 academic years</span>
+        </div>
+        <div class="flat-side"></div>
+      </div>
+      <div class="flat-item">
+        <div class="flat-main">
+          <strong>IoT Smart Helmet Project</strong>
+          <span>Alcohol detection helmet for rider safety — selected Top 2 nationally</span>
+        </div>
+        <div class="flat-side"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="status-line"><span class="dot"></span> READY TO CONNECT</div>
+    <h2>Let's build something durable.</h2>
+    <p>Open to backend and full-stack engineering roles.</p>
+    <div class="footer-links">
+      <a class="btn primary" href="mailto:aryasai64@gmail.com">Email me</a>
+      <a class="btn" href="https://linkedin.com/in/venkatsai0523" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/Venkatsai0523" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="fine">Medchal, Telangana, India &nbsp;·&nbsp; +91-8374277283</div>
+  </footer>
+
+</main>
+
+<script>
+  // Reveal sections on scroll
+  const sections = document.querySelectorAll('section, .proc');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.style.opacity = 1;
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
+    io.observe(el);
+  });
+
+  // Active nav link highlight
+  const navLinks = document.querySelectorAll('.navlinks a');
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(l => {
+          l.style.color = l.getAttribute('href') === '#' + id ? 'var(--teal)' : 'var(--muted)';
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  document.querySelectorAll('main section[id]').forEach(s => navObserver.observe(s));
+</script>
+
+</body>
+</html>
